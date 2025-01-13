@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import pandas as pd
+from sqlalchemy import create_engine
 
 def get_connection():
     conn = psycopg2.connect(
@@ -37,6 +38,23 @@ def get_pbp_data(years, batted_ball = 0):
         
     return pbp_data
 
-conn = get_connection()
-years = list(range(2021,2025))
-pbp_data = get_pbp_data(years, 0)
+def upload_to_sql(data_frame, table_name):
+     engine = create_engine('postgresql://postgres:jamin@localhost:5432/statcast')
+
+     data_frame.to_sql(
+          table_name,
+          engine,
+          if_exists='replace',
+          index=False
+     )
+     print(f"DataFrame {data_frame} uploaded successfully to table: {table_name}")
+
+def get_table(table_name):
+     conn = get_connection()
+     query = f"""
+            SELECT * FROM {table_name};
+            """
+     table = pd.read_sql(query, conn)
+
+     return table
+

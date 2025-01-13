@@ -49,10 +49,6 @@ def upload_to_sql(data_frame, table_name):
      )
      print(f"DataFrame {data_frame} uploaded successfully to table: {table_name}")
 
-conn = get_connection()
-years = list(range(2021,2025))
-pbp_data = get_pbp_data(years, 0)
-
 def get_table(table_name):
      conn = get_connection()
      query = f"""
@@ -61,3 +57,4 @@ def get_table(table_name):
      table = pd.read_sql(query, conn)
 
      return table
+
