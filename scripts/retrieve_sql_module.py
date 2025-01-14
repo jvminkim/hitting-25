@@ -13,7 +13,7 @@ def get_connection():
     )
     return conn
 
-def get_pbp_data(years, batted_ball = 0):
+def get_pbp_data(years):
     conn = get_connection()
     def query_year(year):
         if batted_ball == 1:
@@ -37,6 +37,15 @@ def get_pbp_data(years, batted_ball = 0):
     pbp_data = pd.concat(pbp_data_list, ignore_index=True)
         
     return pbp_data
+
+def get_events_data(year):
+    conn = get_connection()
+    query = f"""
+            SELECT * FROM statcast_all
+            WHERE events IS NOT NULL
+            AND game_year = {year};
+            """
+    return pd.read_sql(query,conn)
 
 def upload_to_sql(data_frame, table_name):
      engine = create_engine('postgresql://postgres:jamin@localhost:5432/statcast')
