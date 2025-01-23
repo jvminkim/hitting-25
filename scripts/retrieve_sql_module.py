@@ -38,7 +38,7 @@ def get_pbp_data(years):
         
     return pbp_data
 
-def get_events_data(year):
+def get_description_data(year):
     conn = get_connection()
     query = f"""
             SELECT * FROM statcast_all
